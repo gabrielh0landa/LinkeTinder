@@ -1,4 +1,5 @@
 package model
+
 import groovy.transform.ToString
 
 @ToString
@@ -9,9 +10,9 @@ class Pessoa {
     String cep
     String estado
     String pais
-    def competencias = []
+    List<String> competencias = []
 
-    Pessoa(String nome, String email, String descricao, String cep, String estado, String pais, List<String> competencias) {
+    Pessoa(String nome, String email, String descricao, String cep, String estado, String pais, List<String> competencias = []) {
         this.nome = nome
         this.email = email
         this.descricao = descricao
@@ -21,16 +22,13 @@ class Pessoa {
         this.competencias = competencias
     }
 
-    Pessoa() {
-        this.competencias = []
+    Pessoa() {}
+
+    void setCompetencias(String competencia) {
+        this.competencias << competencia
     }
 
     void exibirPerfil() {
-        println toString()
-    }
-
-
-    void adicionarCompetencia(String competencia) {
-        competencias << competencia
+        println this
     }
 }
