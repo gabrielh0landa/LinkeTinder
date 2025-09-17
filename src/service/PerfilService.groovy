@@ -14,7 +14,7 @@ class PerfilService {
         if (novoCpf) c.cpf = novoCpf
         if (novaIdade != null) c.idade = novaIdade
         if (novoEmail) c.email = novoEmail
-        if (novaDescricao) c.descricao = novoDescricao
+        if (novaDescricao) c.descricao = novaDescricao
         if (novoCep) c.cep = novoCep
         if (novoEstado) c.estado = novoEstado
         if (novoPais) c.pais = novoPais
