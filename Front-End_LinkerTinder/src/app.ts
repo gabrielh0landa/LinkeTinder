@@ -4,7 +4,7 @@ import { criarFormularioEmpresa } from './views/empresaView.js';
 import { criarDashboardCandidato } from './views/candidatoDashboardView.js';
 import { criarDashboardEmpresa } from './views/empresaDashboardView.js';
 import { gerarGraficoSkills } from './views/graficoSkills.js';
-import { regexCPF, regexEmail, regexCNPJ, regexNome, regexDescricao } from './regex/regex.js';
+import { regexCPF, regexEmail, regexCNPJ, regexCEP, regexNome, regexDescricao } from './regex/regex.js';
 
 type NomePagina = 'cadastro-candidato' | 'cadastro-empresa' | 'dashboard-candidato' | 'dashboard-empresa';
 
@@ -25,31 +25,22 @@ function renderizarTela(nomeDaPagina: NomePagina) {
           const email = (document.getElementById('email') as HTMLInputElement).value;
           const cpf = (document.getElementById('cpf') as HTMLInputElement).value;
           const idade = parseInt((document.getElementById('idade') as HTMLInputElement).value);
+          const cep = (document.getElementById('cep') as HTMLInputElement).value; // <-- CAPTURA O CEP
+          const estado = (document.getElementById('estado') as HTMLInputElement).value; // <-- CAPTURA O ESTADO
           const descricao = (document.getElementById('descricao') as HTMLTextAreaElement).value;
           
-          if (!regexNome.test(nome)) {
-            alert('Erro: Por favor, insira um nome válido (apenas letras e espaços).');
-            return;
-          }
-          if (!regexEmail.test(email)) {
-            alert('Erro: Por favor, insira um email válido.');
-            return;
-          }
-          if (!regexCPF.test(cpf)) {
-            alert('Erro: Por favor, insira um CPF válido no formato XXX.XXX.XXX-XX.');
-            return;
-          }
-          if (descricao && !regexDescricao.test(descricao)) {
-            alert('Erro: A descrição contém caracteres inválidos.');
-            return;
-          }
+          if (!regexNome.test(nome)) { alert('Erro: Por favor, insira um nome válido.'); return; }
+          if (!regexEmail.test(email)) { alert('Erro: Por favor, insira um email válido.'); return; }
+          if (!regexCPF.test(cpf)) { alert('Erro: Por favor, insira um CPF válido no formato XXX.XXX.XXX-XX.'); return; }
+          if (!regexCEP.test(cep)) { alert('Erro: Por favor, insira um CEP válido no formato XXXXX-XXX.'); return; } // <-- VALIDA O CEP
+          if (descricao && !regexDescricao.test(descricao)) { alert('Erro: A descrição contém caracteres inválidos.'); return; }
 
           const skillsSelecionadas: string[] = [];
           document.querySelectorAll('input[name="skills"]:checked').forEach(input => {
             skillsSelecionadas.push((input as HTMLInputElement).value);
           });
           
-          const novoCandidato = new Candidato(nome, email, cpf, idade, "mock-cep", "mock-estado", descricao, skillsSelecionadas);
+          const novoCandidato = new Candidato(nome, email, cpf, idade, cep, estado, descricao, skillsSelecionadas);
           candidatos.push(novoCandidato);
           alert('Candidato cadastrado com sucesso!');
           (form as HTMLFormElement).reset();
@@ -63,25 +54,6 @@ function renderizarTela(nomeDaPagina: NomePagina) {
       const vagasTemporarias: Vagas[] = [];
       const btnAdicionarVaga = document.getElementById('btn-adicionar-vaga');
       const listaVagasUl = document.getElementById('lista-vagas-adicionadas');
-      btnAdicionarVaga?.addEventListener('click', () => { 
-        const nomeVagaInput = document.getElementById('nome-vaga') as HTMLInputElement;
-        const nomeVaga = nomeVagaInput.value;
-        if (!nomeVaga) { alert('Por favor, digite o nome da vaga.'); return; }
-        const skillsVagaSelecionadas: string[] = [];
-        document.querySelectorAll('input[name="vaga-skills"]:checked').forEach(input => {
-          skillsVagaSelecionadas.push((input as HTMLInputElement).value);
-        });
-        const novaVaga = new Vagas(nomeVaga, skillsVagaSelecionadas);
-        vagasTemporarias.push(novaVaga);
-        if(listaVagasUl) {
-            const listItem = document.createElement('li');
-            listItem.textContent = `${novaVaga.nome} (Skills: ${novaVaga.skills.join(', ') || 'Nenhuma'})`;
-            listaVagasUl.appendChild(listItem);
-        }
-        nomeVagaInput.value = '';
-        document.querySelectorAll('input[name="vaga-skills"]:checked').forEach(input => {
-          (input as HTMLInputElement).checked = false;
-        }); });
       
       const form = document.getElementById('formulario-empresa');
       if (form) {
@@ -90,23 +62,16 @@ function renderizarTela(nomeDaPagina: NomePagina) {
           const nome = (document.getElementById('nome-empresa') as HTMLInputElement).value;
           const email = (document.getElementById('email-empresa') as HTMLInputElement).value;
           const cnpj = (document.getElementById('cnpj-empresa') as HTMLInputElement).value;
+          const cep = (document.getElementById('cep-empresa') as HTMLInputElement).value; // <-- CAPTURA O CEP
+          const estado = (document.getElementById('estado-empresa') as HTMLInputElement).value; // <-- CAPTURA O ESTADO
           const descricao = (document.getElementById('descricao-empresa') as HTMLTextAreaElement).value;
 
-          if (!regexEmail.test(email)) {
-            alert('Erro: Por favor, insira um email válido.');
-            return;
-          }
-          if (!regexCNPJ.test(cnpj)) {
-            alert('Erro: Por favor, insira um CNPJ válido no formato XX.XXX.XXX/XXXX-XX.');
-            return;
-          }
-          if (descricao && !regexDescricao.test(descricao)) {
-            alert('Erro: A descrição contém caracteres inválidos.');
-            return;
-          }
+          if (!regexEmail.test(email)) { alert('Erro: Por favor, insira um email válido.'); return; }
+          if (!regexCNPJ.test(cnpj)) { alert('Erro: Por favor, insira um CNPJ válido no formato XX.XXX.XXX/XXXX-XX.'); return; }
+          if (!regexCEP.test(cep)) { alert('Erro: Por favor, insira um CEP válido no formato XXXXX-XXX.'); return; } // <-- VALIDA O CEP
+          if (descricao && !regexDescricao.test(descricao)) { alert('Erro: A descrição contém caracteres inválidos.'); return; }
 
-          const vagasString = (document.getElementById('vagas') as HTMLInputElement).value;
-          const novaEmpresa = new Empresa(nome, email, cnpj, "mock-cep", "mock-estado", vagasTemporarias, descricao);
+          const novaEmpresa = new Empresa(nome, email, cnpj, cep, estado, vagasTemporarias, descricao);
           empresas.push(novaEmpresa);
           alert('Empresa e suas vagas cadastradas com sucesso!');
           (form as HTMLFormElement).reset();

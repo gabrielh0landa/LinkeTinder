@@ -3,14 +3,9 @@ import { Candidato } from '../data/index.js';
 declare var Chart: any;
 
 export function gerarGraficoSkills(candidatos: Candidato[]) {
-  console.log('--- Iniciando Depuração do Gráfico ---');
-  console.log('1. Função gerarGraficoSkills foi chamada com', candidatos.length, 'candidatos.');
-
   const canvasElement = document.getElementById('grafico-skills') as HTMLCanvasElement;
-  console.log('2. Elemento canvas encontrado no HTML:', canvasElement);
 
   if (!canvasElement || candidatos.length === 0) {
-    console.log('3. CONDIÇÃO DE SAÍDA: Canvas ou candidatos não encontrados. Função interrompida.');
     return;
   }
 
@@ -23,8 +18,6 @@ export function gerarGraficoSkills(candidatos: Candidato[]) {
 
   const labels = Object.keys(contagemSkills);
   const data = Object.values(contagemSkills);
-
-  console.log('4. Dados processados para o gráfico:', { labels, data });
 
   new Chart(canvasElement, {
     type: 'bar',
@@ -49,7 +42,4 @@ export function gerarGraficoSkills(candidatos: Candidato[]) {
       }
     }
   });
-
-  console.log('5. Comando para criar o gráfico foi executado com sucesso!');
-  console.log('--- Fim da Depuração ---');
 }

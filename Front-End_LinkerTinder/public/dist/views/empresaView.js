@@ -16,9 +16,14 @@ export function criarFormularioEmpresa() {
       <label for="email-empresa">Email de Contato:</label>
       <input type="email" id="email-empresa" required>
 
-      <label for="cnpj-empresa">CNPJ:</label>
+      <label for="cnpj-empresa">CNPJ (formato XX.XXX.XXX/XXXX-XX):</label>
       <input type="text" id="cnpj-empresa" required>
-            
+
+      <label for="cep-empresa">CEP (formato XXXXX-XXX):</label>
+      <input type="text" id="cep-empresa" required>
+
+      <label for="estado-empresa">Estado (UF):</label>
+      <input type="text" id="estado-empresa" required maxlength="2">
       <label for="descricao-empresa">Descrição da Empresa:</label>
       <textarea id="descricao-empresa" rows="4"></textarea>
 
@@ -38,8 +43,7 @@ export function criarFormularioEmpresa() {
       </div>
 
       <h4>Vagas Adicionadas</h4>
-      <ul id="lista-vagas-adicionadas">
-        </ul>
+      <ul id="lista-vagas-adicionadas"></ul>
             
       <button type="submit">Cadastrar Empresa com Vagas</button>
     </form>
